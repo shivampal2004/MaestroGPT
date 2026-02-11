@@ -27,11 +27,6 @@ const getGeminiApiResponse = async (message) => {
     try {
         const response = await fetch(url, options);
 
-        // Handle Rate Limits (429) gracefully
-        if (response.status === 429) {
-            return "I'm receiving too many requests. Please wait a moment and try again.";
-        }
-
         if (!response.ok) {
             const errorBody = await response.text();
             console.error(`Gemini API Error: ${response.status} - ${errorBody}`);

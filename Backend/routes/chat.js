@@ -37,8 +37,7 @@ router.post("/chat", async (req, res) => {
 
     try {
         let thread = await Thread.findOne({ threadId });
-
-        // 1. Handle User Message Logic
+        
         if (!thread) {
             thread = new Thread({
                 threadId,
@@ -52,18 +51,13 @@ router.post("/chat", async (req, res) => {
             thread.messages.push({ role: "user", content: message });
         }
 
-        // 2. Call Gemini API
         const assistantReply = await getGeminiApiResponse(message);
 
-        // ---------------------------------------------------------
-        // CRITICAL FIX: Check if response is null before proceeding
-        // ---------------------------------------------------------
         if (!assistantReply) {
             console.error("Gemini API failed to return a response.");
             return res.status(500).json({ error: "Failed to generate AI response" });
         }
 
-        // 3. Only push and save if we actually have a reply
         thread.messages.push({ role: "assistant", content: assistantReply });
 
         thread.updatedAt = new Date();
