@@ -3,7 +3,6 @@ import Thread from "../models/Thread.js";
 import getGeminiApiResponse from "../utils/geminiAi.js";
 const router= express.Router();
 
-//get all threads
 router.get("/thread", async(req, res)=>{
     try{
         const threads= await Thread.find({}).sort({updatedAt:-1});
